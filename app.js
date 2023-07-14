@@ -154,17 +154,12 @@
 /*=================================================================================
             Day - 8  --> Working with json Data
 =================================================================================*/
+// server --->>> app --->>> routes --->>> controllers or handlers
 
-let express = require("express");
+const express = require("express");
+const { router } = require("./Routes/movieRoutes");
 
-const {
-  getAllMovies,
-  getASingleMovie,
-  createAMovie,
-  updateAMovie,
-  deleteAMovie,
-} = require("./handlers/routeHandlers");
-let app = express();
+const app = express();
 
 //middleware
 app.use(express.json());
@@ -173,21 +168,12 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use("/api/v1/movies/", router);
+
 // app.get("/api/v1/movies", getAllMovies);
 // app.get("/api/v1/movies/:id", getASingleMovie);
 // app.post("/api/v1/movies", createAMovie);
 // app.patch("/api/v1/movies/:id", updateAMovie);
 // app.delete("/api/v1/movies/:id", deleteAMovie);
 
-app.route("/api/v1/movies").get(getAllMovies).post(createAMovie);
-app
-  .route("/api/v1/movies/:id")
-  .get(getASingleMovie)
-  .patch(updateAMovie)
-  .delete(deleteAMovie);
-
-// create a server
-let port = 8001;
-app.listen(port, (req, res) => {
-  console.log("App is running at port : " + port);
-});
+module.exports = app;
